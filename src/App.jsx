@@ -1,17 +1,16 @@
 import React from "react";
 
-
 export default function GunasoUI() {
   return (
     <div className="min-h-screen bg-gray-100">
 
       {/* Navbar */}
       <nav className="bg-blue-600 text-white px-6 py-4 flex justify-between">
-        <h1 className="font-bold">Gunaso System</h1>
+        <h1 className="font-bold">गुनासो प्रणाली</h1>
         <div className="space-x-4">
-          <button>Home</button>
-          <button>Track</button>
-          <button>Login</button>
+          <button>गृहपृष्ठ</button>
+          <button>गुनासो अवस्था</button>
+          <button>लगइन</button>
         </div>
       </nav>
 
