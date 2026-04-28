@@ -9,6 +9,7 @@ import Login from "./pages/Login";
 
 import Dashboard from "./pages/admin/Dashboard";
 import Complaints from "./pages/admin/Complaints";
+import Users from "./pages/admin/Users";
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
         <Route element={<AdminLayout />}>
           <Route path="/admin/dashboard" element={<Dashboard />} />
           <Route path="/admin/complaints" element={<Complaints />} />
+          <Route path="/admin/users" element={<Users />} />
         </Route>
 
       </Routes>
