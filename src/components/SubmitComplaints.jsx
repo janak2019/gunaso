@@ -1,64 +1,78 @@
 import { useState } from "react";
+import Header from "./Header";
 
 export default function SubmitComplaint() {
   const [form, setForm] = useState({
-    name: "",
+    mobile: "",
     type: "",
     description: "",
   });
 
+  const [error, setError] = useState("");
+
+  const nepalMobileRegex = /^(98|97|96)\d{8}$/;
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!form.type || !form.description) {
-      alert("कृपया सबै आवश्यक विवरण भर्नुहोस्");
+    if (!form.mobile || !form.type || !form.description) {
+      setError("कृपया सबै आवश्यक विवरण भर्नुहोस्");
       return;
     }
 
+    if (!nepalMobileRegex.test(form.mobile)) {
+      setError("वैध नेपाली मोबाइल नम्बर हाल्नुहोस् (98/97/96 बाट सुरु हुने 10 digit)");
+      return;
+    }
+
+    setError("");
     console.log(form);
+
+    alert("Successfully submitted!");
   };
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="bg-gray-100">
+      <Header />
 
-      {/* Header */}
-      <div className="bg-blue-700 text-white py-4 px-6 shadow">
-        <h1 className="text-lg md:text-xl font-bold">
-          डिजिटल गुनासो प्रणाली
-        </h1>
-        <p className="text-sm opacity-90">
-          सुझाव तथा गुनासो दर्ता
-        </p>
-      </div>
-
-      {/* Form Container */}
       <div className="max-w-4xl mx-auto p-4 md:p-6">
-
         <div className="bg-white rounded-2xl shadow-md p-4 md:p-8">
 
-          {/* Title */}
           <div className="mb-6 border-b pb-3">
             <h2 className="text-lg md:text-xl font-semibold text-blue-700">
               सुझाव तथा गुनासो
             </h2>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-2">
 
-            {/* Name */}
+            {/* Mobile Number */}
             <div>
               <label className="block font-medium mb-1">
-                नाम
+                मोबाइल नम्बर <span className="text-red-500">*</span>
               </label>
+
               <input
-                type="text"
-                placeholder="यहाँ आफ्नो नाम लेख्नुहोस्"
+                type="tel"
+                maxLength={10}
+                placeholder="98XXXXXXXX"
                 className="w-full border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                value={form.name}
-                onChange={(e) =>
-                  setForm({ ...form, name: e.target.value })
-                }
+                value={form.mobile}
+                onChange={(e) => {
+                  const value = e.target.value.replace(/\D/g, ""); // only numbers
+                  setForm({ ...form, mobile: value });
+
+                  if (value && !nepalMobileRegex.test(value)) {
+                    setError("अवैध मोबाइल नम्बर (98/97/96 बाट सुरु हुनुपर्छ)");
+                  } else {
+                    setError("");
+                  }
+                }}
               />
+
+              {error && (
+                <p className="text-red-500 text-sm mt-1">{error}</p>
+              )}
             </div>
 
             {/* Type */}
@@ -95,10 +109,11 @@ export default function SubmitComplaint() {
               <label className="block font-medium mb-1">
                 विवरण <span className="text-red-500">*</span>
               </label>
+
               <textarea
                 rows="6"
                 placeholder="यहाँ विवरण लेख्नुहोस्..."
-                className="w-full border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full border rounded-lg p-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 value={form.description}
                 onChange={(e) =>
                   setForm({ ...form, description: e.target.value })
@@ -107,10 +122,10 @@ export default function SubmitComplaint() {
             </div>
 
             {/* Submit */}
-            <div className="flex justify-start">
+            <div>
               <button
                 type="submit"
-                className="bg-blue-600 text-white px-6 py-2 rounded-lg shadow hover:bg-blue-700 transition"
+                className="bg-blue-600 text-white px-6 py-1 rounded-lg shadow hover:bg-blue-700 transition"
               >
                 Submit
               </button>
@@ -120,7 +135,6 @@ export default function SubmitComplaint() {
 
         </div>
       </div>
-
     </div>
   );
 }

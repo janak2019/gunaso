@@ -1,6 +1,6 @@
 export default function Home() {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="bg-gray-50">
 
       {/* Header */}
       <div className="bg-blue-700 text-white p-4 text-center">
@@ -21,7 +21,7 @@ export default function Home() {
 
         <div className="space-y-4">
           <a href="/submit" className="block bg-blue-600 text-white py-3 rounded-xl">
-            📝 गुनासो दर्ता गर्नुहोस्
+            📝 सोधपुछ / सुझाव / गुनासो दर्ता गर्नुहोस्
           </a>
           <a href="/track" className="block bg-gray-300 py-3 rounded-xl">
             🔍 गुनासो ट्र्याक गर्नुहोस्
@@ -30,7 +30,7 @@ export default function Home() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-3 gap-3 px-4 pb-6">
+      <div className="grid grid-cols-3 gap-3 px-4 pb-0">
         <div className="bg-white p-4 rounded-xl text-center shadow">
           <p className="text-sm text-gray-500">कुल</p>
           <h3 className="font-bold text-lg">120</h3>
@@ -44,7 +44,6 @@ export default function Home() {
           <h3 className="font-bold text-lg">90</h3>
         </div>
       </div>
-
     </div>
   );
 }
