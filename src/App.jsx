@@ -10,6 +10,7 @@ import Login from "./pages/Login";
 import Dashboard from "./pages/admin/Dashboard";
 import Complaints from "./pages/admin/Complaints";
 import Users from "./pages/admin/Users";
+import OTPVerify from "./pages/OTPVerify";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
       <Routes>
 
         {/* Public Routes */}
+        <Route path="/verify-otp" element={<OTPVerify />} />
         <Route element={<MainLayout />}>
           <Route path="/" element={<Home />} />
           <Route path="/submit" element={<Submit />} />
@@ -25,6 +27,7 @@ function App() {
 
         {/* Admin Routes */}
         <Route path="/login" element={<Login />} />
+        
         <Route element={<AdminLayout />}>
           <Route path="/admin/dashboard" element={<Dashboard />} />
           <Route path="/admin/complaints" element={<Complaints />} />
