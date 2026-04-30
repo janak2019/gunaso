@@ -1,12 +1,37 @@
+import { useEffect, useState } from "react";
+import API from "../services/api";
+
 export default function Home() {
+  const [stats, setStats] = useState({
+    total: 0,
+    pending: 0,
+    resolved: 0,
+  });
+
+  const [loading, setLoading] = useState(true);
+
+  // 📥 Fetch stats
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const res = await API.get("/complaints/stats");
+        setStats(res.data);
+      } catch (err) {
+        console.error("Error fetching stats", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchStats();
+  }, []);
+
   return (
     <div className="bg-gray-50">
 
       {/* Header */}
       <div className="bg-blue-700 text-white p-4 text-center">
-        <h1 className="text-xl font-bold">
-        गाउँपालिका
-        </h1>
+        <h1 className="text-xl font-bold">गाउँपालिका</h1>
         <p className="text-sm">डिजिटल गुनासो प्रणाली</p>
       </div>
 
@@ -30,19 +55,29 @@ export default function Home() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-3 gap-3 px-4 pb-0">
-        <div className="bg-white p-4 rounded-xl text-center shadow">
-          <p className="text-sm text-gray-500">कुल</p>
-          <h3 className="font-bold text-lg">120</h3>
-        </div>
-        <div className="bg-white p-4 rounded-xl text-center shadow">
-          <p className="text-sm text-yellow-500">Pending</p>
-          <h3 className="font-bold text-lg">30</h3>
-        </div>
-        <div className="bg-white p-4 rounded-xl text-center shadow">
-          <p className="text-sm text-green-600">Resolved</p>
-          <h3 className="font-bold text-lg">90</h3>
-        </div>
+      <div className="grid grid-cols-3 gap-3 px-4 pb-4">
+
+        {loading ? (
+          <p className="col-span-3 text-center">Loading...</p>
+        ) : (
+          <>
+            <div className="bg-white p-4 rounded-xl text-center shadow">
+              <p className="text-sm text-gray-500">कुल</p>
+              <h3 className="font-bold text-lg">{stats.total}</h3>
+            </div>
+
+            <div className="bg-white p-4 rounded-xl text-center shadow">
+              <p className="text-sm text-yellow-500">Pending</p>
+              <h3 className="font-bold text-lg">{stats.pending}</h3>
+            </div>
+
+            <div className="bg-white p-4 rounded-xl text-center shadow">
+              <p className="text-sm text-green-600">Resolved</p>
+              <h3 className="font-bold text-lg">{stats.resolved}</h3>
+            </div>
+          </>
+        )}
+
       </div>
     </div>
   );

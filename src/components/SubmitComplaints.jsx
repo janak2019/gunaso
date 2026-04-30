@@ -32,20 +32,39 @@ export default function SubmitComplaint() {
 
     setError("");
 
+    //   try {
+    //     // 🔥 AUTO SEND OTP
+    //     await API.post("/otp/send", {
+    //       phone: form.mobile,
+    //     });
+
+    //     // Save form temporarily
+    //     localStorage.setItem("complaintForm", JSON.stringify(form));
+
+    //     // Redirect to OTP page
+    //     navigate("/verify-otp");
+
+    //   } catch (err) {
+    //     alert("OTP पठाउन समस्या भयो");
+    //   }
     try {
-      // 🔥 AUTO SEND OTP
-      await API.post("/otp/send", {
-        phone: form.mobile,
+      const res = await API.post("/complaints", {
+        mobile: form.mobile,
+        type: form.type,
+        description: form.description,
       });
 
-      // Save form temporarily
-      localStorage.setItem("complaintForm", JSON.stringify(form));
-
-      // Redirect to OTP page
-      navigate("/verify-otp");
+      alert("Complaint submitted successfully");
+      console.log(res.data);
+      setForm({
+        mobile: "",
+        type: "",
+        description: "",
+      });
 
     } catch (err) {
-      alert("OTP पठाउन समस्या भयो");
+      console.error(err);
+      alert("Error submitting complaint");
     }
   };
 
@@ -103,9 +122,8 @@ export default function SubmitComplaint() {
                 {["उजुरी", "प्रश्न", "सुझाव"].map((item) => (
                   <label
                     key={item}
-                    className={`flex items-center gap-2 border rounded-lg p-3 cursor-pointer hover:bg-gray-50 ${
-                      form.type === item ? "border-blue-500 bg-blue-50" : ""
-                    }`}
+                    className={`flex items-center gap-2 border rounded-lg p-3 cursor-pointer hover:bg-gray-50 ${form.type === item ? "border-blue-500 bg-blue-50" : ""
+                      }`}
                   >
                     <input
                       type="radio"
