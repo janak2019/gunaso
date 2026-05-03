@@ -36,7 +36,7 @@ export default function Complaints() {
       {/* Title + Filter */}
       <div className="flex justify-between items-center">
         <h2 className="text-xl font-bold text-gray-700">
-          Complaints List
+          गुनासो / प्रश्न / सुझावहरुको सूचि
         </h2>
 
         <select

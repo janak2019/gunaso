@@ -3,114 +3,108 @@ import API from "../../services/api";
 
 export default function Complaints() {
   const [complaints, setComplaints] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  // 📥 Load data from backend
-  const fetchComplaints = async () => {
-    try {
-      const res = await API.get("/complaints");
-      setComplaints(res.data);
-    } catch (err) {
-      console.error("Error fetching complaints", err);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const [staffs, setStaffs] = useState([]);
+  const [filter, setFilter] = useState("All");
 
   useEffect(() => {
     fetchComplaints();
+    fetchStaffs();
   }, []);
 
-  // 🔄 Update status
-  const updateStatus = async (id, currentStatus) => {
-    const newStatus = currentStatus === "Pending" ? "Resolved" : "Pending";
-
-    try {
-      await API.put(`/complaints/${id}`, {
-        status: newStatus,
-      });
-
-      // update UI without reload
-      setComplaints((prev) =>
-        prev.map((item) =>
-          item.id === id ? { ...item, status: newStatus } : item
-        )
-      );
-    } catch (err) {
-      console.error("Update failed", err);
-    }
+  const fetchComplaints = async () => {
+    const res = await API.get("/complaints");
+    setComplaints(res.data);
   };
+
+  const fetchStaffs = async () => {
+    const res = await API.get("/users/staff");
+    setStaffs(res.data);
+  };
+
+  // 🔍 FILTER LOGIC
+  const filtered = complaints.filter((c) => {
+    if (filter === "All") return true;
+    if (filter === "Unassigned") return !c.assigned_to;
+    if (filter === "Assigned") return c.assigned_to;
+    if (filter === "Resolved") return c.status === "Resolved";
+    return true;
+  });
 
   return (
     <div className="space-y-4">
 
-      <h2 className="text-xl font-bold">Complaints</h2>
+      {/* HEADER + FILTER */}
+      <div className="flex justify-between items-center">
 
-      {/* Loading */}
-      {loading ? (
-        <p>Loading...</p>
-      ) : (
+        <h2 className="text-xl font-bold">Complaints</h2>
 
-        <div className="bg-white rounded-xl shadow overflow-x-auto">
-          <table className="w-full text-sm">
+        <select
+          className="border p-2 rounded"
+          value={filter}
+          onChange={(e) => setFilter(e.target.value)}
+        >
+          <option value="All">All</option>
+          <option value="Unassigned">Unassigned</option>
+          <option value="Assigned">Assigned</option>
+          <option value="Resolved">Resolved</option>
+        </select>
 
-            <thead className="bg-gray-100">
-              <tr>
-                <th className="p-3 text-left">ID</th>
-                <th className="p-3 text-left">Mobile</th>
-                <th className="p-3 text-left">Type</th>
-                <th className="p-3 text-left">Description</th>
-                <th className="p-3 text-left">Status</th>
-                <th className="p-3 text-left">Action</th>
-              </tr>
-            </thead>
+      </div>
 
-            <tbody>
-              {complaints.map((c) => (
-                <tr key={c.id} className="border-t">
+      {/* TABLE */}
+      <div className="bg-white rounded-xl shadow overflow-x-auto">
 
-                  <td className="p-3">{c.id}</td>
-                  <td className="p-3">{c.mobile}</td>
-                  <td className="p-3">{c.type}</td>
+        <table className="w-full text-sm">
 
-                  <td className="p-3 max-w-xs truncate">
-                    {c.description}
-                  </td>
+          <thead className="bg-gray-100">
+            <tr>
+              <th className="p-3">ID</th>
+              <th className="p-3">Mobile</th>
+              <th className="p-3">Type</th>
+              <th className="p-3">Status</th>
+              <th className="p-3">Assigned Staff</th>
+            </tr>
+          </thead>
 
-                  {/* Status */}
-                  <td className="p-3">
-                    <span
-                      className={`px-2 py-1 rounded text-xs ${
-                        c.status === "Pending"
-                          ? "bg-yellow-100 text-yellow-700"
-                          : "bg-green-100 text-green-700"
-                      }`}
-                    >
-                      {c.status}
+          <tbody>
+            {filtered.map((c) => (
+              <tr key={c.id} className="border-t">
+
+                <td className="p-3">{c.id}</td>
+                <td className="p-3">{c.mobile}</td>
+                <td className="p-3">{c.type}</td>
+
+                {/* STATUS */}
+                <td className="p-3">
+                  <span
+                    className={`px-2 py-1 text-xs rounded ${
+                      c.status === "Pending"
+                        ? "bg-yellow-100 text-yellow-700"
+                        : "bg-green-100 text-green-700"
+                    }`}
+                  >
+                    {c.status}
+                  </span>
+                </td>
+
+                {/* 👇 SHOW STAFF NAME */}
+                <td className="p-3">
+                  {c.staff_mobile ? (
+                    <span className="text-blue-600 font-medium">
+                      {c.staff_mobile}
                     </span>
-                  </td>
+                  ) : (
+                    <span className="text-gray-400">Unassigned</span>
+                  )}
+                </td>
 
-                  {/* Action */}
-                  <td className="p-3">
-                    <button
-                      onClick={() => updateStatus(c.id, c.status)}
-                      className="bg-blue-600 text-white px-3 py-1 rounded"
-                    >
-                      Toggle
-                    </button>
-                  </td>
+              </tr>
+            ))}
+          </tbody>
 
-                </tr>
-              ))}
-            </tbody>
+        </table>
 
-          </table>
-        </div>
-
-      )}
-
+      </div>
     </div>
   );
 }
-
-
