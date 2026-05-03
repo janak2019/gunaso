@@ -59,7 +59,7 @@ export default function AdminLayout() {
 
   {/* TOP - TITLE */}
   <Link
-    to="/admin"
+    to="/admin/dashboard"
     className="block p-4 text-xl font-bold border-b border-blue-500 hover:bg-blue-600"
   >
     Admin Panel
@@ -126,35 +126,11 @@ export default function AdminLayout() {
 
           <Outlet />
 
-          {/* STATS */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-
-            {loading ? (
-              <p className="col-span-3 text-center">Loading...</p>
-            ) : (
-              <>
-                <div className="bg-white p-4 rounded-xl text-center shadow">
-                  <p className="text-sm text-gray-500">कुल</p>
-                  <h3 className="font-bold text-lg">{stats.total}</h3>
-                </div>
-
-                <div className="bg-white p-4 rounded-xl text-center shadow">
-                  <p className="text-sm text-yellow-500">Pending</p>
-                  <h3 className="font-bold text-lg">{stats.pending}</h3>
-                </div>
-
-                <div className="bg-white p-4 rounded-xl text-center shadow">
-                  <p className="text-sm text-green-600">Resolved</p>
-                  <h3 className="font-bold text-lg">{stats.resolved}</h3>
-                </div>
-              </>
-            )}
-
-          </div>
+         
 
         </main>
 
-        {/* 🔥 LOGOUT BUTTON (BOTTOM OF PAGE) */}
+      
         
 
       </div>

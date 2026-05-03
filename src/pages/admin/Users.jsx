@@ -56,7 +56,7 @@ export default function Users() {
       {/* Title */}
       <div>
         <h2 className="text-xl font-bold text-gray-700">
-          Staff Management
+          कर्मचारि व्यवस्थापन
         </h2>
         <p className="text-sm text-gray-500">
           नयाँ staff थप्नुहोस्
