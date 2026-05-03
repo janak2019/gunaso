@@ -37,7 +37,9 @@ export default function Users() {
 
     try {
       await API.post("/users", {
+        name,
         mobile,
+        password,
         role: "staff",
       });
 
